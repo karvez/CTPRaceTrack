@@ -12,11 +12,13 @@ public class spawnTrack : MonoBehaviour {
     GameObject straightTrack;
     Vector3 currentTrackPosition;
     public int counter = 1;
+    string trackpiece = "straightTrackPiece";
     //bool isIdentical = true;
 
-    private bool Load(string trackRead)
+    public bool Load(string trackRead)
     {
-        
+        Debug.Log("Class being called");
+
         // Handle any problems that might arise when reading the text
         try
         {
@@ -49,6 +51,7 @@ public class spawnTrack : MonoBehaviour {
                             //for (int i = 0; i < 4; i++)
                             //{
                                 spawnTrackFromString(entries[1]);
+                            Debug.Log("Got this far");
                            // }
                     }
                 }
@@ -70,7 +73,7 @@ public class spawnTrack : MonoBehaviour {
 
 // Use this for initialization
 void Start () {
- 
+        
         
     }
 	
