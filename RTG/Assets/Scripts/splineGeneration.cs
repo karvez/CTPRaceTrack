@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class splineGeneration : MonoBehaviour {
 
+    Mesh racetrackMesh;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -58,7 +60,7 @@ public class splineGeneration : MonoBehaviour {
 
     public class ExtrudeShape
     {
-        public Vector2[] verts;
+        public Vector2[] verts = new Vector2[4];
         public Vector2[] normals;
         public float[] us;
         public int[] lines = new int[]
@@ -69,14 +71,28 @@ public class splineGeneration : MonoBehaviour {
         4,5
         };
     }
-    
+
+    //public class ExtrudeShapeLeftStraight
+    //{
+    //    public Vector2[] verts = new Vector2[4];
+    //    public Vector2[] normals;
+    //    public float[] us;
+    //    public int[] lines = new int[]
+    //    {
+    //    0,1,
+    //    2,3,
+    //    3,4,
+    //    4,5
+    //    };
+    //}
+
     public struct OrientedPoint
     {
         public Vector3 position;
         public Quaternion rotation;
         public float vCoordinate;
 
-        public OrientedPoint( Vector3 position, Quaternion rotation, float vCoordinate = 0)
+        public OrientedPoint(Vector3 position, Quaternion rotation, float vCoordinate = 0)
         {
             this.position = position;
             this.rotation = rotation;
@@ -92,13 +108,47 @@ public class splineGeneration : MonoBehaviour {
         {
             return Quaternion.Inverse(rotation) * (point - position);
         }
-        
+
         public Vector3 LocalToWorldDirection(Vector3 dir)
         {
             return rotation * dir;
         }
 
     }
+
+
+    //private OrientedPoint[] GetPath()
+    //{
+    //    /*return new OrientedPoint[] {
+    //        new OrientedPoint(
+    //            new Vector3(0, 0, 0),
+    //            Quaternion.identity),
+    //        new OrientedPoint(
+    //            new Vector3(0, 1, 1),
+    //            Quaternion.identity),
+    //        new OrientedPoint(
+    //            new Vector3(0, 0, 2),
+    //            Quaternion.identity)
+    //    };*/
+
+    //    var p = new Vector3[] {
+    //            new Vector3(0, 0, 0),
+    //            new Vector3(0, 0, 10),
+    //            new Vector3(10, 0, 10),
+    //            new Vector3(10, 0, 0)
+    //        };
+
+    //    var path = new List<OrientedPoint>();
+
+    //    for (float t = 0; t <= 1; t += 0.1f)
+    //    {
+    //        var point = GetPoint(p, t);
+    //        var rotation = GetOrientation3D(p, t, Vector3.up);
+    //        path.Add(new OrientedPoint(point, rotation));
+    //    }
+
+    //    return path.ToArray();
+    //}
 
     public void Extrude(Mesh mesh, ExtrudeShape shape, OrientedPoint[] path)
     {
@@ -154,6 +204,57 @@ public class splineGeneration : MonoBehaviour {
         mesh.uv = uvs;
 
     }
+
+   
+
+    //private void GenerateMesh()
+    //{
+    //    var mesh = GetMesh();
+    //    var shape = GetExtrudeShape();
+    //    var path = GetPath();
+
+    //    Extrude(mesh, shape, path);
+    //}
+
+
+   // private ExtrudeShape GetExtrudeShape()
+   // {
+        //var vert2Ds = new Vertex[] {
+        //        new Vertex(
+        //            new Vector3(0, 0, 0),
+        //            new Vector3(0, 1, 0),
+        //            0),
+        //        new Vertex(
+        //            new Vector3(2, 0, 0),
+        //            new Vector3(0, 1, 0),
+        //            0.5f),
+        //        new Vertex(
+        //            new Vector3(2, 0, 0),
+        //            new Vector3(0, 1, 0),
+        //            0.5f),
+        //        new Vertex(
+        //            new Vector3(4, 0, 0),
+        //            new Vector3(0, 1, 0),
+        //            1)
+        //    };
+
+        //var lines = new int[] {
+        //        0, 1,
+        //        1, 2,
+        //        2, 3
+        //    };
+
+        //return new ExtrudeShape(vert2Ds, lines);
+    //}
+
+    //private Mesh GetMesh()
+    //{
+    //    if (mf.sharedMesh == null)
+    //    {
+    //        mf.sharedMesh = new Mesh();
+    //    }
+    //    return mf.sharedMesh;
+    //}
 
     //public static class FloatArrayExtensions
     //{

@@ -12,25 +12,39 @@ public class perlinHills : MonoBehaviour {
     public Material blackMaterial;
     public Material whiteMat;
     public Material yellowMat;
+    public Material tealMaterial;
+    public Material purpleMaterial;
+    public Material pinkMaterial;
+
+    int width = 50;
+    int height = 50;
+
+    int[,] tileArray = new int[50, 50];
+    GameObject[,] perlinTileSpawn = new GameObject[50, 50];
+
+    GameObject perlinTileSpawnObject;
+    Vector3 currentPerlinCubePositon = new Vector3(0, 0, 0);
 
 
     // Use this for initialization
     void Start () {
         //perlinNoiseScrape();
+        perlinTileSpawnObject = Resources.Load("perlinTile") as GameObject;
+        perlinTileSpawnObject.transform.position = new Vector3(0, 0, 0);
+        perlinTileSpawnObject.GetComponent<Renderer>().material = blackMaterial;
         tileCreate();
        // Renderer rend = GetComponent<Renderer>();
 	}
 
+
+    //void Exit()
+    //{
+    //    perlinTileSpawnObject.transform.position = new Vector3(0, 0, 0);
+    //    perlinTileSpawnObject.GetComponent<Renderer>().material = blackMaterial;
+    //}
    // Vector3 startTilePos = new Vector3(0.5f, -0.5f, 0);
 
-    int width = 50;
-    int height = 50;
     
-    int[,] tileArray = new int[50,50];
-    GameObject[,] perlinTileSpawn = new GameObject[50,50];
-
-    GameObject perlinTileSpawnObject;
-    Vector3 currentPerlinCubePositon = new Vector3(0, 0, 0);
 
     // Create array of gameobjects, populate array,
     // Then udpate each objects' Y position based on
@@ -59,7 +73,7 @@ public class perlinHills : MonoBehaviour {
 
     public void tileCreate()
     {
-        perlinTileSpawnObject = Resources.Load("perlinTile") as GameObject;
+        
         for (int i = 0; i < 50; i++)
         {
            for (int j = 0; j < 50; j++)
@@ -116,23 +130,47 @@ public class perlinHills : MonoBehaviour {
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = yellowMat;
                 }
 
-                else if ( value < 0.499999f)
+                else if ( value > 0.400001 && value < 0.499999f)
                 {
-                    Debug.Log("VALUE < 0.6");
+                    Debug.Log("VALUE < 0.4");            
                     currentPerlinCubePositon.z = 0;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = blackMaterial;
                 }
-               
+
+                else if (value > 0.300001 && value < 0.399999f)
+                {
+                    Debug.Log("VALUE < 0.3");
+                    currentPerlinCubePositon.z = 0;
+                    Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
+                    perlinTileSpawn[i, j].GetComponent<Renderer>().material = tealMaterial;
+                }
+
+                else if (value > 0.200001 && value < 0.299999f)
+                {
+                    Debug.Log("VALUE < 0.2");
+                    currentPerlinCubePositon.z = 0;
+                    Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
+                    perlinTileSpawn[i, j].GetComponent<Renderer>().material = pinkMaterial;
+                }
+
+                else if (value < 0.199999f)
+                {
+                    Debug.Log("VALUE < 0.2");
+                    currentPerlinCubePositon.z = 0;
+                    Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
+                    perlinTileSpawn[i, j].GetComponent<Renderer>().material = purpleMaterial;
+                }
+
                 // 
-                
+
                 // If perlin noise value above 0.6, perlinTileSpawn[i, j]
                 currentPerlinCubePositon.x = currentPerlinCubePositon.x + 0.1f;
                 perlinTileSpawn[i, j].transform.position = currentPerlinCubePositon;
                 Debug.Log("Y SPAWN");
             }
 
-            currentPerlinCubePositon.x = 1;
+            currentPerlinCubePositon.x = 0;
             currentPerlinCubePositon.y = currentPerlinCubePositon.y - 0.1f;
             for (int k = 0; k < 50; k++)
             {

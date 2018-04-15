@@ -15,11 +15,20 @@ using Accord.Statistics.Models.Markov.Topology;
 
 public class spawnTest : MonoBehaviour {
 
+    splineGeneration sg;
+    splineGeneration.ExtrudeShape sgEs;
+    splineGeneration.OrientedPoint[] sgOp;
+
+    int[] pathArray = new int[] { 10 };
+    
     GameObject straightTrackPieceObject;
     GameObject startTrack;
     GameObject nextTrackObjectToSpawn;
     UnityEngine.Vector3 currentTrackPosition;
     public Quaternion currentTrackRotation;
+    public UnityEngine.Vector3 testing;
+
+    public Mesh trackMeshExtrusion;
 
     OrderedDictionary markovTrackPieces = new OrderedDictionary();
   
@@ -245,6 +254,9 @@ public class spawnTest : MonoBehaviour {
 
     void Start() {
         accordMarkov();
+        sg = GetComponent<splineGeneration>();
+        //sgEs = GetComponent<splineGeneration.ExtrudeShape>();
+        //sgOp = GetComponent<splineGeneration.OrientedPoint[]>();
         //nextTrackObjectToSpawn = Resources.Load(nextTrackStringToSpawn) as GameObject;
         //Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
 
@@ -304,16 +316,82 @@ public class spawnTest : MonoBehaviour {
         
             Debug.Log(result[0] + " " + result[1] + " " + result[2] + " " + result[3] + " " + result[4] + " " + result[5] + " " + result[6] + " " + result[7] + " " + result[8] + " " + result[9]) ;
 
-       //nextTrackObjectToSpawn = Resources.Load(nextTrackStringToSpawn) as GameObject;
+        //nextTrackObjectToSpawn = Resources.Load(nextTrackStringToSpawn) as GameObject;
 
+
+        //  Add sphere collider to track pieces, if spline colliding with 
+        // perlinTile and perlinTile.transform.z >2,
+        // perlinTile.transform.rotation
+        // nextTrackObjectToSpawn.transform.rotation.Set(45, nextTrackObjectToSpawn.transform.rotation.y, nextTrackObjectToSpawn.transform.rotation.z, nextTrackObjectToSpawn.transform.rotation.w);
 
         for (int i = 0; i < 10; i++)
         {
+           // if ((i>3 && result[i] != "U") || (i > 3 && result[i] != "WCR")/* repeat for all right-angled bends...*/)
+
             if (result[i] == "ST")
             {
+
+                // Use amount of vertices from shape in spline generation etc...
+                // use path.Length - 1; use point look at spline generation
+                //sg.Extrude(trackMeshExtrusion, shape: 3, path:3);
                 nextTrackObjectToSpawn = Resources.Load("ST") as GameObject;
                 currentTrackPosition.x += 2;
                 Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
+                //sg.Extrude(trackMeshExtrusion, sgEs, pathArray//sgOP);
+
+                // Extrude bezier curve along set path for each different track piece
+
+                // Update position and rotation of spline point
+
+                // All U-Bends will ALWAYS be extruded to the RIGht of the current point/spline position
+                // So i.e. if three points create the U-Bend bezier curve, the points location would be A(0,0) , B(1,1) , and C(0,2)
+                // Shape will be drawn the same each instansiation, otherwise would become over complicated for the scope of this project
+
+
+                // *** May need more than 3 points for U-Bend, as 3 points may just create a C-bend ***
+                // On current spline point, rotate point-facing-direction +45 degrees, move 1 unit in current facing direction, place spline-point
+                // Rotate +90 degrees, move 1 unit current facing direction, place spline-point, rotate +45 degrees
+
+                // *** Also depends on how the curve-spline is created, this will determine how the angle, 
+                //  orientation/rotation and point placement is handled
+
+                // *** Transform.rotation += and -= NOT Vector3.. potentially use rotate towards point
+                // Or just use - nextTrackObjectToSpawn.transform.rotation.Set(45, nextTrackObjectToSpawn.transform.rotation.y, nextTrackObjectToSpawn.transform.rotation.z, nextTrackObjectToSpawn.transform.rotation.w);
+
+                // For right/left straigts, rotate +/- 45 degrees from current spline-pint, move 1 unit in direction facing, place spline point
+
+                // Need to work out rotations for C-bends
+
+                // Safety check & correction to ensure track loops back around to start - moves clockwise - will be in place  
+
+                // Extrude again, up to average number of track pieces
+
+                // Check collisions with perlin terrain for rotation and angle of track
+
+                // Check collisions - could use tags - for track pieces, if colliding, place different track piece
+
+                // If there has not been a U-Bend, WCR-Bend, or any Right-angled bend within 3 track-piece spawns
+                // if ((i>3 && result[i] != "U") || (i > 3 && result[i] != "WCR")/* repeat for all right-angled bends...*/)
+                // Then add a right-angled track piece, (WCR,U,BR,RT...)
+                // This is to ensure the racetrack moves in a clockwise direction, as all tracks sampled
+                // Are orientated in clockwise direction
+                // Ideally if the implementation, logic, and data was good enough, this check & correction would not be needed
+                // As the project would produce a "true" formula one racetrack each time a track is to be generated
+
+                // After x amount of track pieces have been extruded, create a straight extrusing from current point to the track-start point
+
+                // *** Remember to finish getting track-piece data from all formula one race tracks ***
+
+                //
+
+                //nextTrackObjectToSpawn.transform.rotation.Set(45, nextTrackObjectToSpawn.transform.rotation.y, nextTrackObjectToSpawn.transform.rotation.z, nextTrackObjectToSpawn.transform.rotation.w);
+                // If (perlinTileGameObjectCollidingWith.transform.z > 2)
+                // {
+                //      currentTrackRotation.x = 45;
+                //      nextTrackObjectToSpawn.transform.SetPositionAndRotation(currentTrackPosition, currentTrackRotation);
+                //      
+                // }
+
                 currentTrackPosition.x += 2;
             }
 

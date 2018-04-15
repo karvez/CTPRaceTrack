@@ -226,6 +226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentTrackRotation: {x: 0, y: 0, z: 0, w: 0}
+  testing: {x: 0, y: 0, z: 0}
+  trackMeshExtrusion: {fileID: 4300000, guid: 72a50bccf3537124bb95abec32e8dc18, type: 3}
 --- !u!4 &1143550631
 Transform:
   m_ObjectHideFlags: 0
@@ -256,3 +258,6 @@ MonoBehaviour:
   blackMaterial: {fileID: 2100000, guid: e07ac4189da928b4d999caa3fc3b6d04, type: 2}
   whiteMat: {fileID: 2100000, guid: cda3223145290d4409c1b69f5c5992e4, type: 2}
   yellowMat: {fileID: 2100000, guid: 066d38bc32a58af4ab66dd10390faa03, type: 2}
+  tealMaterial: {fileID: 2100000, guid: 9cda3d0de5208f24fbeb787baf0eafef, type: 2}
+  purpleMaterial: {fileID: 2100000, guid: 4a2d5a1f3bbf31249b8df263cd0be71b, type: 2}
+  pinkMaterial: {fileID: 2100000, guid: 7567673e1c11cc146afc6243d3ac0fd3, type: 2}
