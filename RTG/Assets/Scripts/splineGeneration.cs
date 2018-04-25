@@ -2,16 +2,78 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Code from Joachim Holmér's Unite 2015 - A coder's guide to spline-based procedural geometry video
+// https://www.youtube.com/watch?v=o9RK6O2kOKo
+
+public struct OrientedPoint
+{
+    public Vector3 position;
+    public Quaternion rotation;
+    public float vCoordinate;
+
+    //public OrientedPoint(Vector3 position, Quaternion rotation, float vCoordinate = 0)
+    //{
+    //    this.position = position;
+    //    this.rotation = rotation;
+    //    this.vCoordinate = vCoordinate;
+    //}
+
+    public Vector3 LocalToWorld(Vector3 point)
+    {
+        return position + rotation * point;
+    }
+
+    public Vector3 WorldToLocal(Vector3 point)
+    {
+        return Quaternion.Inverse(rotation) * (point - position);
+    }
+
+    public Vector3 LocalToWorldDirection(Vector3 dir)
+    {
+        return rotation * dir;
+    }
+
+}
+
+public class ExtrudeShape
+{ 
+
+    //racetrackMesh.vertices;
+    //  public Vector2[] verts = new Vector2[4]
+
+    public Vector2[] verts = new[] { new Vector2(1, 1), new Vector2(2, 2) };
+    public Vector2[] normals = new[] { new Vector2(1, 1), new Vector2(2, 2) };
+    public float[] us = new float[5] { 1, 2, 3, 4, 5 };
+    public int[] lines = new int[]
+    {
+        0,1,
+        2,3,
+        3,4,
+        4,5
+    };
+}
+
 public class splineGeneration : MonoBehaviour {
 
-    Mesh racetrackMesh;
+    [SerializeField]
+    public Mesh racetrackMesh;
+
+    private Vector3 startPos = new Vector3(0, 0, 0);
+    private Quaternion startRot = new Quaternion(0, 0, 0, 0);
+
+    // private Vector3[] meshConvertv3;
+    // private Vector2[] meshConvertv2;
+
+   
+
+   // ExtrudeShape es;
 
 	// Use this for initialization
 	void Start () {
-		
+        orientP();
 	}
     
-
+   
     Vector3 GetPoint(Vector3[] pts, float t)
     {
         float omt = 1f - t;
@@ -58,19 +120,30 @@ public class splineGeneration : MonoBehaviour {
         return Quaternion.LookRotation(tng, nrm);
     }
 
-    public class ExtrudeShape
+    public void racetrackMeshSet()
     {
-        public Vector2[] verts = new Vector2[4];
-        public Vector2[] normals;
-        public float[] us;
-        public int[] lines = new int[]
-        {
-        0,1,
-        2,3,
-        3,4,
-        4,5
-        };
+      //  meshConvertv3 = racetrackMesh.vertices
+       // meshConvertv2 = meshConvertv3;
     }
+
+    //public class ExtrudeShape : MonoBehaviour 
+    //{
+
+
+    //    //racetrackMesh.vertices;
+    //    //  public Vector2[] verts = new Vector2[4]
+
+    //    public Vector2[] verts = new[] { new Vector2(1, 1), new Vector2(2, 2) };
+    //    public Vector2[] normals = new[] { new Vector2(1, 1), new Vector2(2, 2) };
+    //    public float[] us = new float[5] { 1 ,2,3,4,5 };
+    //    public int[] lines = new int[]
+    //    {
+    //    0,1,
+    //    2,3,
+    //    3,4,
+    //    4,5
+    //    };
+    //}
 
     //public class ExtrudeShapeLeftStraight
     //{
@@ -84,37 +157,48 @@ public class splineGeneration : MonoBehaviour {
     //    3,4,
     //    4,5
     //    };
+
     //}
 
-    public struct OrientedPoint
+    OrientedPoint op;
+    
+    public void orientP()
     {
-        public Vector3 position;
-        public Quaternion rotation;
-        public float vCoordinate;
-
-        public OrientedPoint(Vector3 position, Quaternion rotation, float vCoordinate = 0)
-        {
-            this.position = position;
-            this.rotation = rotation;
-            this.vCoordinate = vCoordinate;
-        }
-
-        public Vector3 LocalToWorld(Vector3 point)
-        {
-            return position + rotation * point;
-        }
-
-        public Vector3 WorldToLocal(Vector3 point)
-        {
-            return Quaternion.Inverse(rotation) * (point - position);
-        }
-
-        public Vector3 LocalToWorldDirection(Vector3 dir)
-        {
-            return rotation * dir;
-        }
-
+        op.position = startPos;
+        op.rotation = startRot;
+        op.vCoordinate = 1f;
+        
     }
+
+    //public struct OrientedPoint 
+    //{
+    //    public Vector3 position;
+    //    public Quaternion rotation;
+    //    public float vCoordinate;
+
+    //    //public OrientedPoint(Vector3 position, Quaternion rotation, float vCoordinate = 0)
+    //    //{
+    //    //    this.position = position;
+    //    //    this.rotation = rotation;
+    //    //    this.vCoordinate = vCoordinate;
+    //    //}
+
+    //    public Vector3 LocalToWorld(Vector3 point)
+    //    {
+    //        return position + rotation * point;
+    //    }
+
+    //    public Vector3 WorldToLocal(Vector3 point)
+    //    {
+    //        return Quaternion.Inverse(rotation) * (point - position);
+    //    }
+
+    //    public Vector3 LocalToWorldDirection(Vector3 dir)
+    //    {
+    //        return rotation * dir;
+    //    }
+
+    //}
 
 
     //private OrientedPoint[] GetPath()

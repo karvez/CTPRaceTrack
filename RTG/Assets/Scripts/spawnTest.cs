@@ -16,8 +16,9 @@ using Accord.Statistics.Models.Markov.Topology;
 public class spawnTest : MonoBehaviour {
 
     splineGeneration sg;
-    splineGeneration.ExtrudeShape sgEs;
-    splineGeneration.OrientedPoint[] sgOp;
+  
+    ExtrudeShape sgEs;
+    OrientedPoint[] sgOp;
 
     int[] pathArray = new int[] { 10 };
     
@@ -52,6 +53,8 @@ public class spawnTest : MonoBehaviour {
     private string nextTrackStringToSpawn = "ST";
 
     private int numberOfPiecesSpawning = 0;
+
+    // Variables for each combination of track pieces
 
     private double STST = 0;
     private double STCR = 0;
@@ -248,33 +251,26 @@ public class spawnTest : MonoBehaviour {
     private double RTRT = 0;
     private double rtTotal = 0;
 
-
     // Use this for initialization
 
 
     void Start() {
-        accordMarkov();
-        sg = GetComponent<splineGeneration>();
-        //sgEs = GetComponent<splineGeneration.ExtrudeShape>();
-        //sgOp = GetComponent<splineGeneration.OrientedPoint[]>();
-        //nextTrackObjectToSpawn = Resources.Load(nextTrackStringToSpawn) as GameObject;
-        //Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-
-        //racetrackRead();
-        //racetrackVariableCount();
-        //racetrackSelectPiece();
-        //displayDictionary();
-
-       // spawnTrackFromString();
+        currentTrackPosition.x = -3;
+        currentTrackPosition.y = 3;
         
-        //spawnNextPiece();
+        sg = GetComponent<splineGeneration>();
+        accordMarkov();
 
     }
 
-    public void accordMarkov ()
-      {
-           string[][] phrases =
-          {
+    // Markov Chain code below in function accordMarkov() taken from the Accord.NET Framework website
+    // for Markov Chain Models, using own phrases i.e. the lay out of
+    // racerack pieces "ST", "CR"... in formula one racetracks for the model to learn.
+
+    public void accordMarkov()
+    {
+        string[][] phrases =
+       {
               new[] { "ST", "CR", "ST", "BR", "ST", "U", "ST", "RT", "U", "ST" },
               new[] { "ST", "BR", "BL", "BR", "ST", "BL", "BR", "ST", "U", "ST" },
               new[] { "ST", "U", "RT", "RT", "ST", "U", "ST", "WCL", "ST", "U" },
@@ -313,11 +309,8 @@ public class spawnTest : MonoBehaviour {
 
         // And the result will be: "those", "are", "words".
         string[] result = codebook.Revert("Words", sample);
-        
-            Debug.Log(result[0] + " " + result[1] + " " + result[2] + " " + result[3] + " " + result[4] + " " + result[5] + " " + result[6] + " " + result[7] + " " + result[8] + " " + result[9]) ;
 
-        //nextTrackObjectToSpawn = Resources.Load(nextTrackStringToSpawn) as GameObject;
-
+        Debug.Log(result[0] + " " + result[1] + " " + result[2] + " " + result[3] + " " + result[4] + " " + result[5] + " " + result[6] + " " + result[7] + " " + result[8] + " " + result[9]);
 
         //  Add sphere collider to track pieces, if spline colliding with 
         // perlinTile and perlinTile.transform.z >2,
@@ -326,17 +319,58 @@ public class spawnTest : MonoBehaviour {
 
         for (int i = 0; i < 10; i++)
         {
-           // if ((i>3 && result[i] != "U") || (i > 3 && result[i] != "WCR")/* repeat for all right-angled bends...*/)
+            // The first time i/3 = 1 or 2 or 3 i.e. multiple of 3, then check if it is not a right angled bend
+            // If it isn't then place a right bearing bend
+
+            // if ((result[1] != "U") || ( result[1] != "WCR") ... || (result[2] !=..) || (result[3] !=...))
+            // {
+            // nextTrackObjectToSpawn = Resources.Load("U") as GameObject;
+            // currentTrackRotation.Set(45, 90, 0, 0);
+            // Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
+            // currentTrackPosition.x += 2;
+            // currentTrackPosition.y -= 1;
+            // i++;
+            // }
+
+
+            // if ((result[4] != "U") || ( result[4] != "WCR") ... || (result[5] !=..) || (result[6] !=...))
+            // {
+            // nextTrackObjectToSpawn = Resources.Load("CR") as GameObject;
+            // currentTrackRotation.Set(90, 0, 0, 0);
+            // currentTrackPosition.x -= 1;
+            // Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
+            // currentTrackPosition.y -= 1;
+            // currentTrackPosition.x += 1;
+            // i++;
+            // }
+
+
+
+            // if ((result[7] != "U") || ( result[7] != "WCR") ... || (result[8] !=..) || (result[9] !=...))
+            // {
+            // nextTrackObjectToSpawn = Resources.Load("RT") as GameObject;
+            // currentTrackRotation.Set(180, 0, 0, 0);
+            // Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
+            // currentTrackPosition.y -= 1;
+            // currentTrackPosition.x += 1;
+            // i++;
+            // }
 
             if (result[i] == "ST")
             {
+                Debug.Log("Just before extrude funciton");
+                GameObject sgo = GameObject.Find("racetrackGeneration");
+                splineGeneration sg = sgo.GetComponent<splineGeneration>();
+
+                //sg.Extrude(trackMeshExtrusion, sgEs, sgOp);
 
                 // Use amount of vertices from shape in spline generation etc...
                 // use path.Length - 1; use point look at spline generation
-                //sg.Extrude(trackMeshExtrusion, shape: 3, path:3);
+
                 nextTrackObjectToSpawn = Resources.Load("ST") as GameObject;
                 currentTrackPosition.x += 2;
                 Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
+
                 //sg.Extrude(trackMeshExtrusion, sgEs, pathArray//sgOP);
 
                 // Extrude bezier curve along set path for each different track piece
@@ -347,22 +381,12 @@ public class spawnTest : MonoBehaviour {
                 // So i.e. if three points create the U-Bend bezier curve, the points location would be A(0,0) , B(1,1) , and C(0,2)
                 // Shape will be drawn the same each instansiation, otherwise would become over complicated for the scope of this project
 
-
-                // *** May need more than 3 points for U-Bend, as 3 points may just create a C-bend ***
                 // On current spline point, rotate point-facing-direction +45 degrees, move 1 unit in current facing direction, place spline-point
                 // Rotate +90 degrees, move 1 unit current facing direction, place spline-point, rotate +45 degrees
-
-                // *** Also depends on how the curve-spline is created, this will determine how the angle, 
-                //  orientation/rotation and point placement is handled
-
-                // *** Transform.rotation += and -= NOT Vector3.. potentially use rotate towards point
-                // Or just use - nextTrackObjectToSpawn.transform.rotation.Set(45, nextTrackObjectToSpawn.transform.rotation.y, nextTrackObjectToSpawn.transform.rotation.z, nextTrackObjectToSpawn.transform.rotation.w);
-
+          
                 // For right/left straigts, rotate +/- 45 degrees from current spline-pint, move 1 unit in direction facing, place spline point
 
-                // Need to work out rotations for C-bends
-
-                // Safety check & correction to ensure track loops back around to start - moves clockwise - will be in place  
+                 // Safety check & correction to ensure track loops back around to start - moves clockwise - will be in place  
 
                 // Extrude again, up to average number of track pieces
 
@@ -380,10 +404,6 @@ public class spawnTest : MonoBehaviour {
 
                 // After x amount of track pieces have been extruded, create a straight extrusing from current point to the track-start point
 
-                // *** Remember to finish getting track-piece data from all formula one race tracks ***
-
-                //
-
                 //nextTrackObjectToSpawn.transform.rotation.Set(45, nextTrackObjectToSpawn.transform.rotation.y, nextTrackObjectToSpawn.transform.rotation.z, nextTrackObjectToSpawn.transform.rotation.w);
                 // If (perlinTileGameObjectCollidingWith.transform.z > 2)
                 // {
@@ -392,7 +412,7 @@ public class spawnTest : MonoBehaviour {
                 //      
                 // }
 
-                currentTrackPosition.x += 2;
+               // currentTrackPosition.x += 2;
             }
 
 
@@ -506,212 +526,16 @@ public class spawnTest : MonoBehaviour {
                 currentTrackPosition.y -= 1;
                 currentTrackPosition.x += 1;
             }
-
-
-        }
-
-        //if (nextTrackStringToSpawn == "ST")//
-        //{
-        //    currentTrackPosition.x += 2;
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.x += 2;
-        //}
-
-        //if (nextTrackStringToSpawn == "CR") //
-        //{
-
-        //    currentTrackRotation.Set(90, 0, 0, 0);
-        //    // currentTrackPosition.x -= 1;
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 1;
-        //    currentTrackPosition.x += 1;
-        //}
-
-        //if (nextTrackStringToSpawn == "CL") //
-        //{
-
-        //    //currentTrackPosition.x += 1;
-        //    currentTrackRotation.Set(0, 180, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 1;
-        //}
-
-        //if (nextTrackStringToSpawn == "BR")
-        //{
-
-        //    currentTrackRotation.Set(45, 0, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 1;
-        //    currentTrackPosition.x += 1;
-        //}
-
-        //if (nextTrackStringToSpawn == "U") //
-        //{
-
-        //    currentTrackRotation.Set(45, 90, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.x += 2;
-        //    currentTrackPosition.y -= 1;
-
-        //}
-
-        //if (nextTrackStringToSpawn == "WCR")//
-        //{
-
-        //    currentTrackRotation.Set(180, 0, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 2;
-        //    currentTrackPosition.x += 1;
-
-        //}
-
-        //if (nextTrackStringToSpawn == "LT") //
-        //{
-
-        //    currentTrackRotation.Set(180, 0, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y += 1;
-        //    currentTrackPosition.x += 1;
-        //}
-
-        //if (nextTrackStringToSpawn == "WCL") //
-        //{
-
-        //    currentTrackRotation.Set(-180, 0, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 2;
-        //    currentTrackPosition.x += 1;
-        //}
-
-        //if (nextTrackStringToSpawn == "BL") //
-        //{
-
-        //    currentTrackRotation.Set(180, 90, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y += 1;
-        //    currentTrackPosition.x += 1;
-        //}
-
-        //if (nextTrackStringToSpawn == "Z") //
-        //{
-
-        //    currentTrackRotation.Set(90, 0, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 2;
-        //    currentTrackPosition.x += 2;
-        //}
-
-        //if (nextTrackStringToSpawn == "BB") //
-        //{
-
-        //    currentTrackRotation.Set(90, 0, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 1;
-        //    currentTrackPosition.x += 2;
-        //}
-
-        //if (nextTrackStringToSpawn == "TB") //
-        //{
-
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 2;
-        //    currentTrackPosition.x += 2;
-        //}
-
-        //if (nextTrackStringToSpawn == "RT") //
-        //{
-
-        //    currentTrackRotation.Set(180, 0, 0, 0);
-        //    Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-        //    currentTrackPosition.y -= 1;
-        //    currentTrackPosition.x += 1;
-        //}
-
-    }
-
-    public void displayDictionary()
-    {
-        //Dictionary<string, int>.KeyCollection trackKeyColl = markovTrackDict.Keys;
-        //Dictionary<string, int>.ValueCollection trackValueColl = markovTrackDict.Values;
-
-        //foreach (string trackKeyString in trackKeyColl)
-        //{
-        //    Debug.Log("Type of track piece: " + trackKeyString);
-        //}
-
-        foreach (KeyValuePair<string, int> kvp in markovTrackDict)
-        {
-            Debug.Log("Dictionary contains" + kvp.Key + kvp.Value);
+            if ( currentTrackPosition.x > 0)
+            {
+                 currentTrackPosition.x -= 2;
+            }
+           
         }
     }
 
-    //     public void ReadIt()
-    //{
-    //    // Open the file into a streamreader
-    //    using (System.IO.StreamReader sr = new System.IO.StreamReader("text_path_here.txt"))
-    //    {
-    //        while (!sr.EndOfStream) // Keep reading until we get to the end
-    //        {
-    //            string splitMe = sr.ReadLine();
-    //            string[] bananaSplits = splitMe.Split(new char[] { ',' }); //Split at the commas
 
-    //            //if (bananaSplits.Length < 2) // If we get less than 2 results, discard them
-    //             //   continue; 
-    //             if (bananaSplits.Length == 2) // Easy part. If there are 2 results, add them to the dictionary
-    //                allTheThings.Add(bananaSplits[0].Trim(), bananaSplits[1].Trim());
-    //            else if (bananaSplits.Length > 2)
-    //                SplitItGood(splitMe, allTheThings); // Hard part. If there are more than 2 results, use the method below.
-    //        }
-    //    }
-    //}
-
-    //public void SplitItGood(string actualInputTest, Dictionary<string, int> markovTrackDict)
-    //{
-    //    StringBuilder sb = new StringBuilder();
-    //    List<string> trackHold = new List<string>(); // This list will hold the keys and values as we find them
-    //    bool hasFirstValue = false;
-
-    //    foreach (char c in actualInputTest) // Iterate through each character in the input
-    //    {
-    //        if (c != ',') // Keep building the string until we reach a comma
-    //            sb.Append(c);
-    //        else if (c == ',' && !hasFirstValue)
-    //        {
-    //            trackHold.Add(sb.ToString().Trim());
-    //                sb.Length = (0);
-    //            hasFirstValue = true;
-    //        }
-    //        //else if (c == ',' && hasFirstValue)
-    //       // {
-
-    //            // Below, the StringBuilder currently has something like this:
-    //            // "    235235         Some Text Here"
-    //            // We trim the leading whitespace, then split at the first sign of a double space
-    //            //string[] bananaSplit = sb.ToString()
-    //            //                         .Trim()
-    //            //                         .Split(new string[] { "  " },
-    //            //                                StringSplitOptions.RemoveEmptyEntries);
-
-    //            //    // Add both results to the list
-
-    //            //    trackHold.Add(bananaSplit[0].Trim());
-    //            //    trackHold.Add(bananaSplit[1].Trim());
-    //            //    sb.Length = (0);
-    //           // }                    
-    //    }
-
-    //        trackHold.Add(sb.ToString().Trim()); // Add the last result to the list
-
-    //for (int i = 0; i < trackHold.Count; i += 2)
-    //{
-    // This for loop assumes that the amount of keys and values added together
-    // is an even number. If it comes out odd, then one of the lines on the input
-    // text file wasn't parsed correctly or wasn't generated correctly.
-
-    //markovTrackDict.Add(trackHold[i], trackHold[i + 1]);
-
-    // }
-    // }
+  // Code below adapted from string builder
 
     public void racetrackRead()
     {
@@ -757,8 +581,14 @@ public class spawnTest : MonoBehaviour {
 
    public void racetrackVariableCount()
             
-      {   
-        
+      {
+
+        // Original method was to have if statements  to increment variables
+        // for every variation i.e. STST, STCR, STCL and then CRST, CRCR, CRCL
+        // And so on until every combination of possible track bends had been
+        // accounted for.
+
+
         // Need to be up until the trackhold.Count -1 for 2nd i parameter
 
         for (int i = 0; i < trackHold.Count -1; i ++)
@@ -1363,21 +1193,25 @@ public class spawnTest : MonoBehaviour {
         while (numberOfPiecesSpawning < 10)
         {
             // create virtual track classes virtual variables functions
-            // ! Surround below in some while or if statements, sort logic out LATER
             // Set amount of track piece to spawn e.g. 20 
 
-            // This part first, possible ignore **marked
+            
+            // Cumulative probability checker to choose which track 
+            // piece to spawn next, based one percentage weighting for each track
+            // that is determined by how often the combination turns up 
+            // in the list of data for formula one racetracks.
+
              if (nextTrackStringToSpawn == "ST")
              {
-                // ! Normalise probabilities to the range of 0-1 for values
-                // Create this: List<KeyValuePair<string, double>> stList = new List<KeyValuePair<string, double>>();
-                // Add all values to list
-                // Remove first prefix to determine e.g. the CR before CRST,
-                // (Otherwise would have to choose 3rd and 4th char from string)
-
+                
+                // Creating list to add all string combinations and weighting for
+                // those combinations
+              
                 List<KeyValuePair<string, double>> stList = new List<KeyValuePair<string, double>>();
 
                 stTotal = STST + STCR + STCL + STBR + STU + STWCR + STLT + STWCL + STBL + STZ + STBB + STTB + STRT;
+
+                // Normalise probabilities to the range of 0-1 for values
 
                 stList.Add(new KeyValuePair<string, double>("ST", (STST/stTotal)));
                 stList.Add(new KeyValuePair<string, double>("CR", (STCR/stTotal)));
@@ -1392,6 +1226,13 @@ public class spawnTest : MonoBehaviour {
                 stList.Add(new KeyValuePair<string, double>("BB", (STBB/stTotal)));
                 stList.Add(new KeyValuePair<string, double>("TB", (STTB/stTotal)));
                 stList.Add(new KeyValuePair<string, double>("RT", (STRT/stTotal)));
+
+                // Code taken from http://www.vcskicks.com/random-element.php
+
+                // And again in original method the code was duplicated
+                // for each combination of track pieces
+
+                // More likely to choose element if it has a higher weighting
 
                 System.Random r = new System.Random();
                 double randomRoll = r.NextDouble();
@@ -1887,155 +1728,12 @@ public class spawnTest : MonoBehaviour {
         }
     }
        
-          
-            // http://www.vcskicks.com/random-element.php
-            // https://stackoverflow.com/questions/3655430/selection-based-on-percentage-weighting
-
-            // Seperate dicitonaries for each track piece 
-            // e.g. dictionary for STST,STCR.. dictionary for CRST,CRCR... etc
-            
-            /* 
-
-               Random r = new Random();
-               double diceRoll = r.NextDouble();
-
-               double cumulative = 0.0;
-               for (int i = 0; i < stList.Count; i++)
-                {
-                   cumulative += stList[i].Value;
-                    if (diceRoll < cumulative)
-                     {
-                          nextTrackStringToSpawn = stList[i].Key;
-                            break;
-                     }
-                }
-                // spawnNextPiece();
-
-            If (nextTrackObjectToSpawn == "CR")
-            // {
-            // ! Normalise probabilities to the range of 0-1 for values
-            // Create this: List<KeyValuePair<string, double>> crList = new List<KeyValuePair<string, double>>();
-            // Add all values to list
-            // Remove first prefix to determine e.g. the CR before CRST
-            // Otherwise would have to choose 3rd and 4th char from string
-            // crList.Add(new KeyValuePair<string, double> ("ST", CRST)); etc..    
-
-            Random r = new Random();
-               double diceRoll = r.NextDouble();
-
-               double cumulative = 0.0;
-               for (int i = 0; i < crList.Count; i++)
-                {
-                   cumulative += crList[i].Value;
-                    if (diceRoll < cumulative)
-                     {
-                          nextTrackStringToSpawn = crList[i].Key;
-                            break;
-                     }
-                }
-                // spawnNextPiece();
-              }       
-
-        */
-
-    //if (markovTrackDict.TryGetValue(actualInputTest, out currentCount))
-    //{
-    //    markovTrackDict[actualInputTest] = currentCount + 1;
-    //    //https://stackoverflow.com/questions/7132738/incrementing-a-numerical-value-in-a-dictionary
-
-        //}
-        //else
-        //{
-        //    markovTrackDict.Add(actualInputTest, currentCount);
-        //}
-
-
-        //for (int i = 0; i < 50; i++)
-        //{
-        //    // if (markovTrackDict.ContainsKey(actualInputTest))
-        //    // {
-        //    if (markovTrackDict.TryGetValue(actualInputTest,out currentCount))
-        //{
-        //        markovTrackDict[actualInputTest] = currentCount + 1;
-        //        //https://stackoverflow.com/questions/7132738/incrementing-a-numerical-value-in-a-dictionary
-        //        // markovTrackDict[i++],actualInputTest
-        //    }
-
-
-        // else
-        // {
-        //   markovTrackDict.Add(actualInputTest, currentCount);
-        //       }
-
-
-        //if (markovTrackDict[i]
-        //markovTrackDict(KeyValuePair <[i][++] >);
-        //markovTrackDict(key[i], value++);
-        //}
-        // }
-
-        //public void DisplayContents(ICollection keyCollection, ICollection valueCollection,int dictionarySize)
-        //   {
-
-        //       String[] myKeys = new String[dictionarySize];
-        //       String[] myValues = new String[dictionarySize];
-        //       keyCollection.CopyTo(myKeys, 0);
-        //       valueCollection.CopyTo(myValues, 0);
-
-        //       // Displays the contents of the OrderedDictionary
-        //          for (int i = 0; i < maxWordLength; i++)
-        //       {
-        //           listOfPieces[i] = myValues[i];
-        //       }
-
-        //   }
-
-        //   public void addTrackPiecesToDict()
-        //   {
-
-        //       ICollection keyCollection = markovTrackPieces.Keys;
-        //       ICollection valueCollection = markovTrackPieces.Values;
-
-        //       // increment each variable for how many times it's found in list
-        //       //
-
-        //       for (int i = 0; i < maxWordLength; i ++)
-        //       {
-        //           if (listOfPieces[i] == "ST" && listOfPieces[i+1] == "ST")
-        //           {
-        //               STST++;
-        //           }
-        //           if (listOfPieces[i] == "ST" && listOfPieces[i + 1] == "CR")
-        //           {
-        //               STCR++;
-        //           }
-
-        //       }
-
-        //   }
-
-
-    //public void spawnTrackFromString()
-    //{
-    //   // GameObject straightTrackPieceObject = (GameObject)Instantiate(Resources.Load(stTrackString));
-    //    currentTrackPosition = new Vector3(0,0,0);
-
-    //    straightTrackPieceObject = Resources.Load(stTrackString) as GameObject;
         
-    //    Instantiate(straightTrackPieceObject, currentTrackPosition, Quaternion.identity);
-    //    currentTrackPosition.y += 1;
-
-    //}
-
-    //void OnCollisionEnter (Collision col)
-    //{
-    //    Destroy(nextTrackObjectToSpawn);
-    //    // Call function to change rotation and position of track piece
-    //    // Or spawn a different track piece
-    //}
-
     public void spawnNextPiece()
     {
+
+        // Spawning the track objects in 3D space, based on what
+        // was chosen from the weighted probability list
         
         nextTrackObjectToSpawn = Resources.Load(nextTrackStringToSpawn) as GameObject;
        
