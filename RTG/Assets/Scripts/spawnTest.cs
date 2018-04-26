@@ -22,6 +22,8 @@ public class spawnTest : MonoBehaviour {
 
     int[] pathArray = new int[] { 10 };
     
+    // Object for track piece and string to be set 
+
     GameObject straightTrackPieceObject;
     GameObject startTrack;
     GameObject nextTrackObjectToSpawn;
@@ -46,7 +48,6 @@ public class spawnTest : MonoBehaviour {
     private int counter = 1;
     private string stTrackString = "straightTrackPiece";
     private string uTrackString = "uBendTest";
-    //private string currentTrackToSpawn;
 
     private List<string> trackHold = new List<string>();
 
@@ -264,6 +265,7 @@ public class spawnTest : MonoBehaviour {
     }
 
     // Markov Chain code below in function accordMarkov() taken from the Accord.NET Framework website
+    // http://accord-framework.net/docs/html/T_Accord_Statistics_Models_Markov_HiddenMarkovModel.htm
     // for Markov Chain Models, using own phrases i.e. the lay out of
     // racerack pieces "ST", "CR"... in formula one racetracks for the model to learn.
 
@@ -535,7 +537,8 @@ public class spawnTest : MonoBehaviour {
     }
 
 
-  // Code below adapted from string builder
+    // Code below adapted from string builder from microsoft website
+    // https://msdn.microsoft.com/en-us/library/system.text.stringbuilder(v=vs.110).aspx
 
     public void racetrackRead()
     {
@@ -560,7 +563,6 @@ public class spawnTest : MonoBehaviour {
                 sb.Append(c);
 
                 // If string(track piece) already in dictioanry, increment it's value by 1
-                // currentCount needs to be greater than 0?
 
             }
 
@@ -572,8 +574,7 @@ public class spawnTest : MonoBehaviour {
 
                 trackHold.Add(sb.ToString().Trim());
                 sb.Length = (0);
-                // markovTrackDict.Add(sb.ToString(), currentCount);
-                // sb.Length = (0);
+
             }
         }
     }
@@ -1233,6 +1234,8 @@ public class spawnTest : MonoBehaviour {
                 // for each combination of track pieces
 
                 // More likely to choose element if it has a higher weighting
+                // Set the next track to spawn string to whatever was chosen
+                // by the cumulative weigting algorithm.
 
                 System.Random r = new System.Random();
                 double randomRoll = r.NextDouble();
@@ -1732,8 +1735,8 @@ public class spawnTest : MonoBehaviour {
     public void spawnNextPiece()
     {
 
-        // Spawning the track objects in 3D space, based on what
-        // was chosen from the weighted probability list
+        // Spawning the track objects in 3D space, based on the 
+        // string that was chosen from the weighted probability list
         
         nextTrackObjectToSpawn = Resources.Load(nextTrackStringToSpawn) as GameObject;
        
