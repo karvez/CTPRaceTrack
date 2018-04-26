@@ -63,7 +63,7 @@ public class perlinHills : MonoBehaviour {
                 if (value > 0.5000001f && value < 0.599999f)
                 {
 
-                    currentPerlinCubePositon.z = 0.1f;
+                    currentPerlinCubePositon.z = 0.5f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = redMaterial;
 
@@ -72,7 +72,7 @@ public class perlinHills : MonoBehaviour {
                 else if (value > 0.600001f && value < 0.699999f)
                 {
                    
-                    currentPerlinCubePositon.z = 0.2f;
+                    currentPerlinCubePositon.z = 0.6f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);        
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = greenMaterial;
 
@@ -81,7 +81,7 @@ public class perlinHills : MonoBehaviour {
                 else if (value > 0.700001f && value < 0.799999f)
                 {
                     
-                    currentPerlinCubePositon.z = 0.3f;
+                    currentPerlinCubePositon.z = 0.7f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = blueMaterial;
                 }
@@ -89,14 +89,14 @@ public class perlinHills : MonoBehaviour {
                 else if (value > 0.800001f && value < 0.899999f)
                 {
                    
-                    currentPerlinCubePositon.z = 0.4f;
+                    currentPerlinCubePositon.z = 0.8f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = whiteMat;
                 }
 
                 else if (value > 0.900001f)
                 {
-                    currentPerlinCubePositon.z = 0.5f;
+                    currentPerlinCubePositon.z = 0.9f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = yellowMat;
                 }
@@ -104,7 +104,7 @@ public class perlinHills : MonoBehaviour {
                 else if ( value > 0.400001 && value < 0.499999f)
                 {
                                
-                    currentPerlinCubePositon.z = 0;
+                    currentPerlinCubePositon.z = 0.4f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = blackMaterial;
                 }
@@ -112,7 +112,7 @@ public class perlinHills : MonoBehaviour {
                 else if (value > 0.300001 && value < 0.399999f)
                 {
                     
-                    currentPerlinCubePositon.z = 0;
+                    currentPerlinCubePositon.z = 0.3f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = tealMaterial;
                 }
@@ -120,7 +120,7 @@ public class perlinHills : MonoBehaviour {
                 else if (value > 0.200001 && value < 0.299999f)
                 {
                     
-                    currentPerlinCubePositon.z = 0;
+                    currentPerlinCubePositon.z = 0.2f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = pinkMaterial;
                 }
@@ -128,7 +128,7 @@ public class perlinHills : MonoBehaviour {
                 else if (value < 0.199999f)
                 {
                     
-                    currentPerlinCubePositon.z = 0;
+                    currentPerlinCubePositon.z = 0.1f;
                     Instantiate(perlinTileSpawn[i, j], currentPerlinCubePositon, Quaternion.identity);
                     perlinTileSpawn[i, j].GetComponent<Renderer>().material = purpleMaterial;
                 }

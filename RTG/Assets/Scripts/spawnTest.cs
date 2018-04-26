@@ -360,20 +360,13 @@ public class spawnTest : MonoBehaviour {
 
             if (result[i] == "ST")
             {
-                Debug.Log("Just before extrude funciton");
-                GameObject sgo = GameObject.Find("racetrackGeneration");
-                splineGeneration sg = sgo.GetComponent<splineGeneration>();
-
-                //sg.Extrude(trackMeshExtrusion, sgEs, sgOp);
-
+                
                 // Use amount of vertices from shape in spline generation etc...
                 // use path.Length - 1; use point look at spline generation
 
                 nextTrackObjectToSpawn = Resources.Load("ST") as GameObject;
                 currentTrackPosition.x += 2;
                 Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
-
-                //sg.Extrude(trackMeshExtrusion, sgEs, pathArray//sgOP);
 
                 // Extrude bezier curve along set path for each different track piece
 
@@ -418,21 +411,24 @@ public class spawnTest : MonoBehaviour {
             }
 
 
-            if (result[i] == "CR") //
+            // Choosing which track piece to spawn based on learned data,
+            // then spawning object in 3D space, while keeping track
+            // of rotation and position so it knows where to spawn 
+            // the next track piece
+
+            if (result[i] == "CR") 
             {
                 nextTrackObjectToSpawn = Resources.Load("CR") as GameObject;
                 currentTrackRotation.Set(90, 0, 0, 0);
-                // currentTrackPosition.x -= 1;
                 Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
                 currentTrackPosition.y -= 1;
                 currentTrackPosition.x += 1;
             }
 
-            if (result[i] == "CL") //
+            if (result[i] == "CL") 
             {
 
                 nextTrackObjectToSpawn = Resources.Load("CL") as GameObject;
-                //currentTrackPosition.x += 1;
                 currentTrackRotation.Set(0, 180, 0, 0);
                 Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);
                 currentTrackPosition.y -= 1;
