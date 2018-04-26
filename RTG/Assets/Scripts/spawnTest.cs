@@ -15,39 +15,16 @@ using Accord.Statistics.Models.Markov.Topology;
 
 public class spawnTest : MonoBehaviour {
 
-    splineGeneration sg;
-  
-    ExtrudeShape sgEs;
-    OrientedPoint[] sgOp;
-
-    int[] pathArray = new int[] { 10 };
+ 
     
     // Object for track piece and string to be set 
 
     GameObject straightTrackPieceObject;
-    GameObject startTrack;
     GameObject nextTrackObjectToSpawn;
     UnityEngine.Vector3 currentTrackPosition;
     public Quaternion currentTrackRotation;
-    public UnityEngine.Vector3 testing;
 
     public Mesh trackMeshExtrusion;
-
-    OrderedDictionary markovTrackPieces = new OrderedDictionary();
-  
-    List<string> listOfPieces = new List<string>();
-
-    int currentCount = 0;
-
-    int straightCount = 0;
-    int sphereCount = 0;
-    int squareCount = 0;
-
-    Dictionary<string, int> markovTrackDict = new Dictionary<string, int>();
-    
-    private int counter = 1;
-    private string stTrackString = "straightTrackPiece";
-    private string uTrackString = "uBendTest";
 
     private List<string> trackHold = new List<string>();
 
@@ -258,8 +235,6 @@ public class spawnTest : MonoBehaviour {
     void Start() {
         currentTrackPosition.x = -3;
         currentTrackPosition.y = 3;
-        
-        sg = GetComponent<splineGeneration>();
         accordMarkov();
 
     }
@@ -312,8 +287,6 @@ public class spawnTest : MonoBehaviour {
         // And the result will be: "those", "are", "words".
         string[] result = codebook.Revert("Words", sample);
 
-        Debug.Log(result[0] + " " + result[1] + " " + result[2] + " " + result[3] + " " + result[4] + " " + result[5] + " " + result[6] + " " + result[7] + " " + result[8] + " " + result[9]);
-
         //  Add sphere collider to track pieces, if spline colliding with 
         // perlinTile and perlinTile.transform.z >2,
         // perlinTile.transform.rotation
@@ -361,9 +334,6 @@ public class spawnTest : MonoBehaviour {
             if (result[i] == "ST")
             {
                 
-                // Use amount of vertices from shape in spline generation etc...
-                // use path.Length - 1; use point look at spline generation
-
                 nextTrackObjectToSpawn = Resources.Load("ST") as GameObject;
                 currentTrackPosition.x += 2;
                 Instantiate(nextTrackObjectToSpawn, currentTrackPosition, currentTrackRotation);

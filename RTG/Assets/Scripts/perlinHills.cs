@@ -20,9 +20,8 @@ public class perlinHills : MonoBehaviour {
     int width = 50;
     int height = 50;
 
-    // Creating a 2D-Array of "tiles" for base as Perlin Noise algorithm
+    // Creating a 2D-Array of GameObject "tiles" for base as Perlin Noise algorithm
 
-    int[,] tileArray = new int[50, 50];
     GameObject[,] perlinTileSpawn = new GameObject[50, 50];
 
     GameObject perlinTileSpawnObject;
@@ -137,7 +136,6 @@ public class perlinHills : MonoBehaviour {
                 
                 currentPerlinCubePositon.x = currentPerlinCubePositon.x + 0.1f;
                 perlinTileSpawn[i, j].transform.position = currentPerlinCubePositon;
-                Debug.Log("Y SPAWN");
             }
 
             // After a row (50 cubes) have been spawned, then decrement the y value
